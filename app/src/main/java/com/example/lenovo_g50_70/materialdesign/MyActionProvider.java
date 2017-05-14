@@ -23,24 +23,21 @@ public class MyActionProvider extends android.support.v4.view.ActionProvider {
     @Override
     public void onPrepareSubMenu(SubMenu subMenu) {
         super.onPrepareSubMenu(subMenu);
-
+        //每次点击都会新添加子菜单，所以要清除上一次的
+        subMenu.clear();
         subMenu.add("sub item 1")
                 .setIcon(R.mipmap.ic_launcher)
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
-                {
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item)
-                    {
+                    public boolean onMenuItemClick(MenuItem item) {
                         return true;
                     }
                 });
         subMenu.add("sub item 2")
                 .setIcon(R.mipmap.ic_launcher)
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
-                {
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item)
-                    {
+                    public boolean onMenuItemClick(MenuItem item) {
                         return true;
                     }
                 });

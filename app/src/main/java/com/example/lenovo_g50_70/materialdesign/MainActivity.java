@@ -1,5 +1,6 @@
 package com.example.lenovo_g50_70.materialdesign;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,19 +10,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.Window;
 import android.widget.Toast;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import com.nineoldandroids.view.ViewHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +48,55 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //-------------
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {//监听菜单滑动时的动画效果
+                View mContent = drawerLayout.getChildAt(0);
+                View mMenu = drawerView;
+                float scale = 1 - slideOffset;
+                float rightScale = 0.8f + scale * 0.2f;
+
+                //Tag,用于给相关联的view添加额外的信息
+                if (drawerView.getTag().equals("START"))
+                {
+
+                    float leftScale = 1 - 0.3f * scale;
+
+                    ViewHelper.setScaleX(mMenu, leftScale);
+                    ViewHelper.setScaleY(mMenu, leftScale);
+                    ViewHelper.setAlpha(mMenu, 0.6f + 0.4f * (1 - scale));
+                    ViewHelper.setTranslationX(mContent, mMenu.getMeasuredWidth() * (1 - scale));
+                    ViewHelper.setPivotX(mContent, 0);
+                    ViewHelper.setPivotY(mContent, mContent.getMeasuredHeight() / 2);
+                    mContent.invalidate();
+                    ViewHelper.setScaleX(mContent, rightScale);
+                    ViewHelper.setScaleY(mContent, rightScale);
+                } else
+                {
+                    ViewHelper.setTranslationX(mContent, -mMenu.getMeasuredWidth() * slideOffset);
+                    ViewHelper.setPivotX(mContent, mContent.getMeasuredWidth());
+                    ViewHelper.setPivotY(mContent, mContent.getMeasuredHeight() / 2);
+                    mContent.invalidate();
+                    ViewHelper.setScaleX(mContent, rightScale);
+                    ViewHelper.setScaleY(mContent, rightScale);
+                }
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -140,30 +187,16 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"You clicked Delete",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings:
-                Toast.makeText(this,"You clicked Settings",Toast.LENGTH_SHORT).show();
+                drawerLayout.openDrawer(GravityCompat.END);
+                //打开手势滑动
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
                 break;
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
                 break;
         }
         return true;
     }
 
-    /**
-     *让Overflow中的选项显示图标
-     */
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-        if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
-            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
-                try {
-                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-                    m.setAccessible(true);
-                    m.invoke(menu, true);
-                } catch (Exception e) {
-                }
-            }
-        }
-        return super.onMenuOpened(featureId, menu);
-    }
 }
