@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Tag,用于给相关联的view添加额外的信息
                 if (drawerView.getTag().equals("START"))
-                {
-
+                {//左侧滑栏
                     float leftScale = 1 - 0.3f * scale;
 
                     ViewHelper.setScaleX(mMenu, leftScale);
@@ -71,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     mContent.invalidate();
                     ViewHelper.setScaleX(mContent, rightScale);
                     ViewHelper.setScaleY(mContent, rightScale);
-                } else
-                {
+                } else {//右侧滑栏
                     ViewHelper.setTranslationX(mContent, -mMenu.getMeasuredWidth() * slideOffset);
                     ViewHelper.setPivotX(mContent, mContent.getMeasuredWidth());
                     ViewHelper.setPivotY(mContent, mContent.getMeasuredHeight() / 2);

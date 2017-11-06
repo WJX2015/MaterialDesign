@@ -62,6 +62,7 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"/>
 
+
     <!--侧滑右布局-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_rightview"
